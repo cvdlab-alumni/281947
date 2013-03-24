@@ -1,4 +1,4 @@
-write a script exercise02.js that prints in console the following multiplication table, then commit it and push it:
+
 
 var matrix = "";
 

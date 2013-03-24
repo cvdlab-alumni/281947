@@ -1,20 +1,3 @@
-/*
-exercise02
-
-exercise02a
-
-write a function that pushes into an array n random integer numbers
-
-exercise02b
-
-filter even numbers and return the odd ones
-
-exercise02c
-
-sort obtained numbers from the smallest to the largest
-
-*/
-
 function function_pushRandomNumbers (n) {
 	var naturalNumbers = [];
 

@@ -1,25 +1,3 @@
-/*
-exercise01a
-
-write a function that pushes into an array the first n natural numbers
-
-exercise01b
-
-filter out odd number and return the even ones
-
-exercise01c
-
-double each even number obtained
-
-exercise01d
-
-return only numbers divisible by four
-
-exercise01e
-
-sum all the remaining numbers
-*/
-
 function pushfirstnatural(n){
 		var arrayNatural=[];
 		for(var i=1; i<=n; i++)	{
