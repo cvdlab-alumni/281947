@@ -51,11 +51,34 @@ function Triangle(edgeA, edgeB, edgeC){
 
 
 /*
+Write a method perimeter for Triangle
+that compute the perimeter of the triangle.
+*/
+function Perimeter(triangle){
+	var trianglePerimeter;
+
+	var lengthEdgeA = lengthEdge(triangle.getEdgeA());
+	var lengthEdgeB = lengthEdge(triangle.getEdgeB());
+	var lengthEdgeC = lengthEdge(triangle.getEdgeC());
+
+	trianglePerimeter = lengthEdgeA + lengthEdgeB + lengthEdgeC;
+
+	return trianglePerimeter;
+
+}
+
+
+/*
 var p1 = new Point2D(1,1);
-var p2 = new Point2D(5,4);
-var edge = new Edge(p1,p2);
-lengthEdge(edge);
+var p2 = new Point2D(2,2);
+var p3 = new Point2D(3,3);
 
+var edgeA = new Edge(p1,p2);
+var edgeB = new Edge(p2,p3);
+var edgeC = new Edge(p3,p1);
 
+var tri = new Triangle(edgeA, edgeB, edgeC);
+
+var per = Perimeter(tri);
 
 */
