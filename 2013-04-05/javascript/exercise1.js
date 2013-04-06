@@ -11,10 +11,13 @@ var altezzaComplessiva = solaio+altezzaPilastri
 
 
 function pilastroQuadrato(lato, altezza){
-	return CUBOID([lato,lato,altezza];}
+	return CUBOID([lato,lato,altezza]);}
 
 function pilastroCilindrico(r,h){
 	return CYL_SURFACE([r,h])([100,1]);}
 
 var pilQuadrato = pilastroQuadrato(latoColonnaQuadrata, altezzaPilastri) 
 var pilCilindrico = pilastroCilindrico(raggioColonnaSferica, altezzaPilastri) 
+
+
+var colonnaTraslataDietroP0 = T([2])([distanzaAssePrimaSecondaFila])(pilQuadrato)
