@@ -66,7 +66,7 @@ bucoSolaioF4 = STRUCT([T([1,2])([0.4,0.37]),(CUBOID([7.58,7.35,solaio]))])
 floor4Completo = STRUCT([DIFFERENCE([floor3,bucoSolaioF4])])
 
 
-structure = STRUCT([floor0, 
+building = STRUCT([floor0, 
 	               T(3)(altezzaPiano),(floor1Completo), 
 	               T(3)(altezzaPiano),(floor2Completo), 
 	               T(3)(altezzaPiano),(floor3Completo), 
@@ -74,4 +74,4 @@ structure = STRUCT([floor0,
 
 
 
-VIEW(structure)
+VIEW(building)

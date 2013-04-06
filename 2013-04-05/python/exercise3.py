@@ -29,5 +29,10 @@ facciataNordFloor3 = STRUCT([T(3)((altezzaMuro+solaio)*2),(facciataNordFloor1)])
 facciataNordFloor0 = CUBOID([3.78,0.4,4])
 facciataNordFloor0 = STRUCT([T(1,2)(5.85,2.51),(facciataNordFloor0)])
 
-structure = STRUCT([facciataNordFloor1,facciataNordFloor2,facciataNordFloor3,facciataNordFloor0 ])
+northFace = STRUCT([facciataNordFloor1,facciataNordFloor2,facciataNordFloor3,facciataNordFloor0 ])
+
+
+
+
+
 
