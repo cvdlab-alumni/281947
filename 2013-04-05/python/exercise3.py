@@ -33,6 +33,20 @@ northFace = STRUCT([facciataNordFloor1,facciataNordFloor2,facciataNordFloor3,fac
 
 
 
+murobassoSud = STRUCT([T([1,2])([2.93, 2.11]), (CUBOID([4.51,0.4,4]))])
+finestraMuroBassoSud = STRUCT([T([1,2,3])([3.1, 2.11,2.1]), (CUBOID([2,0.4,1.5]))])
+murobassoSud =  STRUCT([DIFFERENCE([murobassoSud, finestraMuroBassoSud])])
+
+facciataFloor0Sud = STRUCT([murobassoSud])
+
+
+facciataSudfloor1 = GRID([ [9.70], [0.4], [-4.74,4]])
+
+finestralungaFloor1 = STRUCT([T([1,3])([0.70, 4.75]), (CUBOID([1,0.4,3]))])
+finestraQuadrataFloor1Sud = GRID([ [-2.70, 1.6, -0.2, 1.6, -0.2, 1.6, -0.2, 1.6], [0.4], [-0.25,1.65,-0.2, 1.65]])
+
+
+facciataSudfloor1 = STRUCT([DIFFERENCE([facciataSudfloor1, finestralungaFloor1, finestraQuadrataFloor1Sud])])
 
 
 
