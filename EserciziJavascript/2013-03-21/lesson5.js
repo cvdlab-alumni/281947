@@ -20,7 +20,7 @@ function Edge(point2DA, point2DB){
 	this.getPointB = function(){return this.pointB;}
 }
 
-/*Write a method length for Edge
+/*Write a metho	d length for Edge
 that compute the length of the edge.*/
 function lengthEdge(edge){
 	var lengthEdge;
@@ -67,11 +67,31 @@ function Perimeter(triangle){
 
 }
 
+/*
+Write a method area for Triangle
+that compute the area of the triangle
+(Do you remeber the Erone's formula?).
+*/
+function Area(triangle){
+	var area;
+
+	var lengthEdgeA = lengthEdge(triangle.getEdgeA());
+	var lengthEdgeB = lengthEdge(triangle.getEdgeB());
+	var lengthEdgeC = lengthEdge(triangle.getEdgeC()); 
+
+	var p = (lengthEdgeC + lengthEdgeB + lengthEdgeA)/2;
+
+	var area = Math.sqrt((p * (p-lengthEdgeA) * (p-lengthEdgeB) * (p-lengthEdgeC)) ,2);
+
+	return area;
+}
+
+
 
 /*
-var p1 = new Point2D(1,1);
-var p2 = new Point2D(2,2);
-var p3 = new Point2D(3,3);
+var p1 = new Point2D(0,0);
+var p2 = new Point2D(0,3);
+var p3 = new Point2D(4,0);
 
 var edgeA = new Edge(p1,p2);
 var edgeB = new Edge(p2,p3);
