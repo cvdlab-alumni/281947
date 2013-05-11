@@ -12,10 +12,10 @@ def Circle(altezza,raggio):
 def creaVolante():
 	c1 = Circle(0,1)
 	c2 = Circle(0.3,1)
-	c3 = Circle(0,0.5)
+	c3 = Circle(0.3,0.5)
 	c4 = Circle(0.3,0.5)
 	#
-	fBezVolante = MAP(BEZIER(S2)([c1,c2]))(domC)
+	fBezVolante = MAP(BEZIER(S2)([c1,c2,c3,c4]))(domC)
 	#
 	return STRUCT([fBezVolante])
 
