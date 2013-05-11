@@ -31,41 +31,23 @@ def creaCopertone(coloreCopertone,ColoreCerchio):
 	#
 	return  STRUCT([COLOR(coloreCopertone)(fBezCopertone),COLOR(ColoreCerchio)(fBezCerchioInt),COLOR(ColoreCerchio)(fBezCerchioneInterno)])
 
-def bezLinesCopertone():
-	puntiLinee1 = [[0.015,-0.01,0.15],[0,0,0.15],[0.5,-5,0.15]]
-	puntiLinee2 = [[0.015,0.01,0.15],[0,0,0.15],[0.5,5,0.15]]
-	#
-	fBezLinee1 = BEZIER(S1)(puntiLinee1)
-	fBezLinee2 = BEZIER(S2)(puntiLinee2)
-	#
-	VIEW(STRUCT([MAP(PROFILEPRODSURFACE([fBezLinee1,fBezLinee2]))(dom2D)]))
-	return STRUCT([MAP(PROFILEPRODSURFACE([fBezLinee1,fBezLinee2]))(dom2D)])
-
-
-decorazione1 = T(3)(0.15)(CUBOID([0.2,0.3,0]))
-decorazione1 = T(1)(-0.1)(decorazione1)
-
-decorazione2 = COLOR(RED)(T(3)(0.15)(CUBOID([0.2,0.3,0])))
-decorazione2 = T(1)(-0.1)(decorazione2)
-decorazione2 = T(2)(-0.3)(decorazione2)
-
-
-decorazione3 = COLOR(GREEN)(T(3)(0.15)(CUBOID([0.3,0.2,0])))
-decorazione3 = T(1)(0.1)(decorazione3)
-decorazione3 = T(2)(-0.1)(decorazione3)
-
-decorazione4 = COLOR(BLACK)(T(3)(0.15)(CUBOID([0.2,0.3,0])))
-decorazione4 = T(1)(-0.3)(decorazione4)
-decorazione4 = T(2)(0.7)(decorazione4)
-
-VIEW(STRUCT([decorazione1,decorazione2,decorazione3,decorazione4,copertone]))
+def aggiungiDecorazioni(copertone):
+	decorazione1 = T(3)(0.15)(CUBOID([0.2,0.3,0]))
+	decorazione1 = T(1)(-0.1)(decorazione1)
+	decorazione2 = T(3)(0.15)(CUBOID([0.2,0.3,0]))
+	decorazione2 = T(1)(-0.1)(decorazione2)
+	decorazione2 = T(2)(-0.3)(decorazione2)
+	decorazione3 = T(3)(0.15)(CUBOID([0.3,0.2,0]))
+	decorazione3 = T(1)(0.1)(decorazione3)
+	decorazione3 = T(2)(-0.1)(decorazione3)
+	decorazione4 = T(3)(0.15)(CUBOID([0.3,0.2,0]))
+	decorazione4 = T(1)(-0.3)(decorazione4)
+	decorazione4 = T(2)(-0.1)(decorazione4)
+	decorazioni = STRUCT([decorazione1,decorazione2,decorazione3,decorazione4,copertone])
+	return STRUCT([copertone,decorazioni])
 
 
 
-copertone = creaCopertone(BLACK,WHITE)
-linee = bezLinesCopertone()
-VIEW(linee)
-
-
+copertone = aggiungiDecorazioni(creaCopertone(BLACK,WHITE))
 
 VIEW(copertone)

@@ -2,6 +2,7 @@
 #embed them in 3D (in the x=0, y=0 and z=0 planes, respectively, with the reference frame 
 #origin set approximately at the car centroid) and mount them together in a "two-and-a-half-dimensional" 
 #(2.5D) or "pseudo-3D" model.
+#Fella davide, 281947
 
 from pyplasm import *
 import sys
@@ -23,12 +24,6 @@ final= 0.8 #tratto dopo la seconda ruota
 #Piano con y = 0
 ##############################################################
 def creaProfiloBasso_xz():
-	First = 1.3 #inizioMacchinaFinoAPrimaruota
-	dR1R2 = 4.5 #distanzaTraLeDueRuote
-	h_R = 1 #altezza ruota
-	l_R = 1.5 #larghezza ruota
-	final= 0.8 #tratto dopo la seconda ruota
-	#
 	puntiTrattoUno=[[0,0,0.1],[First,0,0]]	#tratto fino alla ruota anteriore, impostato a 1,5		
 	puntiRuotaAnteriore=[[First,0,0],[First,0,0], [First,0,h_R],[First,0,h_R], [First+l_R,0,h_R],[First+l_R,0,h_R], [First+l_R,0,0],[First+l_R,0,0]]
 	puntiTrattoCentrale=[[First+l_R,0,0],[dR1R2+First+l_R,0,0]] #tratto centrale, impostato a 4.5
@@ -156,13 +151,13 @@ def creaYZ():
 	return STRUCT([parteVerticale,muso,parteSuperiore,abitacolo,parteSuperiorePiatta])
 
 profilox0 = creaYZ()
-VIEW(STRUCT([profiloy0,profilox0]))
+#VIEW(STRUCT([profiloy0,profilox0]))
 
 ##############################################################
 #Piano con z = 0
 ##############################################################
 def creaArcoSinistra():
-	parteSinistra = [[0.1,0.3,0],[-0.1,(profonditMacchina-0.3)/2,0],[0.1,(profonditMacchina-0.3),0]]
+	parteSinistra = [[0.1,0.3,0],[-0.1,(profonditaMacchina-0.3)/2,0],[0.1,(profonditaMacchina-0.3),0]]
 	#
 	fBezSx = BEZIER(S1)(parteSinistra)
 	#
@@ -171,7 +166,7 @@ def creaArcoSinistra():
 
 def creaCompletamentoArcoSinistra():
 	puntiSx = [[0.1,0.3,0],[0.1,0,0],[0.5,0,0]]
-	puntiDx = [[0.1,(profonditMacchina-0.3),0],[0.1,profonditMacchina,0],[0.5,profonditMacchina,0]]
+	puntiDx = [[0.1,(profonditaMacchina-0.3),0],[0.1,profonditaMacchina,0],[0.5,profonditaMacchina,0]]
 	#
 	fBezSx = BEZIER(S1)(puntiSx)
 	fBezDx = BEZIER(S1)(puntiDx)
@@ -181,7 +176,7 @@ def creaCompletamentoArcoSinistra():
 	return STRUCT([fMapSx,fMapDx])
 
 def creaParteCentrale():
-	puntiParteSup = [[0.5,profonditMacchina,0],[((dR1R2+First+l_R*2+final)-0.5)/2,profonditMacchina-0.2,0],[dR1R2+First+l_R*2+final,profonditMacchina,0]]
+	puntiParteSup = [[0.5,profonditaMacchina,0],[((dR1R2+First+l_R*2+final)-0.5)/2,profonditaMacchina-0.2,0],[dR1R2+First+l_R*2+final,profonditaMacchina,0]]
 	puntiParteInf = [[0.5,0,0],[((dR1R2+First+l_R*2+final)-0.5)/2,0.2,0],[dR1R2+First+l_R*2+final,0,0]]
 	#
 	fBezSup = BEZIER(S1)(puntiParteSup)
