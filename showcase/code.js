@@ -18,7 +18,7 @@
   var colour_red = [1,0,0];
   var colour_green = [0,1,0.5];
   var colour_blu = [0,0,1];
-  var colour_green_black = [0.66,1.11,0.66];
+  var colour_black_black = [0.84,0.84,0.84];
 
   var RBott = 0.5;
   var depthBott = arrow_depth;
@@ -297,7 +297,7 @@
 
   function makeRettVerde(){
     rettangoloVerde = makeRett(widthRettGreen,heightRettGreen, 0.001);
-    rettangoloVerde = colour(colour_green_black,rettangoloVerde);
+    rettangoloVerde = colour(colour_black_black,rettangoloVerde);
     return rettangoloVerde;
   }
 
@@ -386,7 +386,7 @@
     cir = colour(colour_red, cir);
 
     cir2 = DISK(0.03)();
-    cir2 = colour(colour_green_black, cir2);
+    cir2 = colour(colour_black_black, cir2);
     cir2 = trasla_z(0.001,cir2)
 
     Oletter = STRUCT([cir,cir2])
@@ -445,7 +445,7 @@
 
   function makeRettVerdePiccolo(){
     rettangoloBianco = makeRett(widthRettGreen,heightRettGreen/2, 0.001);
-    rettangoloBianco = colour(colour_green_black,rettangoloBianco); 
+    rettangoloBianco = colour(colour_black_black,rettangoloBianco); 
     return rettangoloBianco;
   }
 
