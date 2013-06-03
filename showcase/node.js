@@ -38,7 +38,7 @@
   var colour_red = [1,0,0];
   var colour_green = [0,1,0.5];
   var colour_blu = [0,0,1];
-  var colour_green_black = [0.66,1.11,0.66];
+  var colour_green_black = [0.84,0.84,0.84];
 
   var RBott = 0.5;
   var depthBott = arrow_depth;
