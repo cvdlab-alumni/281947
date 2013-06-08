@@ -49,7 +49,7 @@
 		return (a0===b0 && a1===b1);
 	}
 
-	//Get coor z by the x and y
+	//Get coord z by the x and y
 	function getZByXY(xy){
 		var objpz;
 		for(i=0; i<this.pointOnMap.length; i++)
@@ -108,7 +108,7 @@
 	function makeForest(){
 		var foresta;
 		conf = makeConiferous(0.05,0.3,40);
-		random = ~~Math.floor((Math.random()*2600))
+		random = ~~Math.floor((Math.random()*2600)) //~~ troncate
 		y = this.pointOnMap[random].py;
 		x = this.pointOnMap[random].px;
 		z = getZByXY([x,y])	
