@@ -6,35 +6,54 @@
 	var ribLenght = altezza*0.33;
 	var dom2D = DOMAIN([[0,1],[0,1]])([30,30])
 	var dom1D = INTERVALS(1)(32);
-	var altezzaRunner = 10;
+	var altezzaRunner = 10; //distanza da terra
 
 
 	//Funzioni di appoggio
+
+		function bezierMappata_1D(controlpoints){
+			return BEZIER(S0)(controlpoints);
+		}
+
+		function bezierMappata_2D(functions){
+			var x = BEZIER(S1)(functions)
+		return MAP(x)(dom2D)
+		}
+
+
 	function creaCilindro(r,h){
 		cyl = EXTRUDE([h])(DISK(r)(100));
 		return cyl;
 	}
 
-	function ARC(alpha, r, R) {
-		var domain = DOMAIN([[0,alpha],[r,R]])([36,1]);
-			var mapping = function (v) {
-				var a = v[0];
-				var r = v[1];
-				return [r*COS(a), r*SIN(a)];
+	function arc (alpha, beta, r, R) {
+		var domain = DOMAIN([[alpha,beta],[r,R]])([36,1]);
+		var mapping = function (v) {
+			var a = v[0];
+			var r = v[1];
+			return [r*COS(a), r*SIN(a)];
+		}
+		var model = MAP(mapping)(domain);
+	return model;
 	}
 
-	var model = MAP(mapping)(domain);
-	return model;
+	var Circum = function(h, r){
+		var Circum0 = function(v){
+			return [r*COS(v[0]), r*SIN(v[0]), h];
+	}
+	return Circum0;
 }
-
 
 	//ex 1
 	function creaAstaManico(r,h){
 		var astaCentrale = creaCilindro(r,h,5);
-		var parteFinale = creaCilindro(r*1.2,altezza*0.05,5);
+		var parteFinale = creaCilindro(r*1.2,altezza*0.02,5);
 		var bottomSpring = creaBottomSpring();
 		bottomSpring = T([0,2])([raggio,altezza*0.2])(bottomSpring);
-		var strutturaFinale = STRUCT([astaCentrale,parteFinale,bottomSpring]);
+
+		var manico = creaManico();
+
+		var strutturaFinale = STRUCT([astaCentrale,parteFinale,bottomSpring,manico]);
 		return strutturaFinale;
 	}
 
@@ -43,9 +62,14 @@
 		return bottomSpring;
 	}
 
-	function parteTorica(){
-		var arco = R([1,2])([PI/2])(ARC(PI,3,5)));
-		return arco;
+	function creaManico(){
+		var dim = raggio*1.7;
+		var cub = CUBOID([dim,dim,6]);
+		cub = T([0,1,2])([-dim/2,-dim/2,-dim])(cub);
+		var arco =  EXTRUDE([5])(arc(-PI/2,PI/2,4,9));
+		arco = R([0,2])([PI/2])(arco)
+		arco = T([0,1,2])([-2,6.3,-4])(arco);
+		return STRUCT([arco,cub]);
 	}
 
 
@@ -72,8 +96,6 @@
 		var pntControlloStret1 = [[0,0,0],[ribLenght*0.71,0,altezza*0.1]];
 		var bezierStret1 = BEZIER(S0)(pntControlloStret1);
 		stretcher = MAP(bezierStret1)(dom1D);
-
-
 		return stretcher;
 	}
 
@@ -103,12 +125,21 @@
 		strs = creaStrutturaStretcher();
 		runner = T([2])([altezza*0.666])(creaRunner());
 		topSpring = T([0,2])([-raggio,altezza*0.6])(creaTopSpring());
+		creaTopNotch = creaTopNotch();
+		punta = creaPunta();
+		return STRUCT([ribs,strs,runner,topSpring,creaTopNotch,punta]);
+	}
 
-		return STRUCT([ribs,strs,runner,topSpring]);
+	function creaPunta(){
+		var punta; 
+		return STRUCT([punta]);
 
 	}
 
-
+	function creaTopNotch(){
+		var cilindro = T([2])([altezza*0.925])(creaCilindro(raggio*1.2,2));
+		return cilindro;
+	}
 
 	manico = creaAstaManico(raggio,altezza);
 	parteSuperiore = creaParteSup();
