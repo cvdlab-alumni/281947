@@ -25,7 +25,7 @@ var CYLINDER = function(r,h){
   var b1 = DISK(r)(l);
   var b2 = T([2])([h])(b1);
   return STRUCT([s,b1,b2]);
- }
+  }
  return C0;
 }
 
