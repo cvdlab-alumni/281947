@@ -1,236 +1,261 @@
-//Gio Ponti's coffee table
+//PoangChair
+var poangChair;
+var larghezza = 34;
+var profondita = 41; 
+var altezza = 50;
+var larAsse = 2;
+var h_Asse = 1;
+var profAsse = 2.1;
+var lunghezzaBraccio = 35
 
-//Variabili
+var l_sedile=4; //larghezza asse del sedile (z)
+var h_sedile=1; //altezza asse sedile (y)
+var x_sedile=larghezza;
+
+var redd =[1,0.5,0];
 var dom1D = INTERVALS(1)(32);
 var dom2D = DOMAIN([[0,1],[0,1]])([30,30]);
-
-var coffeeTableModel; 
-
-var diametroTavolino = 10;
-var spessoreBordo = 0.15;
-var estrusioneRaggio = 1;
-
-var larghezzaLinee = 0.1;
-var lungh_linea = Math.cos(PI/4)* (diametroTavolino/2) * (0.985);
-
-var altezzaGambaSup = estrusioneRaggio * 3;
-var raggioGambaSup = larghezzaLinee;
-var altezzaGambaInf = altezzaGambaSup * 0.5;
-var raggioGambaInf = raggioGambaSup * 0.5;
-var raggioDisco = raggioGambaSup;
-var altezzaDisco = 0.03;
-
-/* Colori */  
-var redd =[1,0.5,0];
-var red = [1,0,0]; 
-var blue = [0,0,1]; 
-var green = [0,1,0]; 
-var yellow = [1,1,0]; 
-var black = [0.3,0.3,0.3]; 
-var white = [1,1,1]; 
-var dark_grey = [41/256,41/256,41/256]; 
-var gold = [205/256,173/256,0]; 
-var glass_color = [185/256,211/256,238/256,0.6]; 
-
-var raggioAsta = 0.5;
-var altezzaAsta = 24;
-
-var spessoreGradini = 0.5;
-var profonditaPiano = 5;
-var lunghezzaPrimoGradino = 12;
-var trasla_x_scaffale = -1; //correzione asse, centro nello spazio
-var trasla_y_scaffale = -1;
-
-var altezzaPrimoScaffale = 4;
-
-
-//funzioni
-function arc (alpha, r, R) {
-	var domain = DOMAIN([[0,alpha],[r,R]])([100,1]);	
-	var mapping = function (v) {
-		var a = v[0];
-		var r = v[1];
-		return [r*COS(a), r*SIN(a)];
-	}
-	var model = MAP(mapping)(domain);
-	return model;
-} 
-
-var CYLINDER = function(r,h){
-	 function C0(l){
-	  var s = CYL_SURFACE([r,h])(l);
-	  var b1 = DISK(r)(l);
-	  var b2 = T([2])([h])(b1);
-	  return STRUCT([s,b1,b2]);
-	 }
-	 return C0;
-}
+//222,184,135
+var chair_color = [222/255,184/255,135/255];
 
 function bezierMappata_2D(functions){
 	var x = BEZIER(S1)(functions)
 	return MAP(x)(dom2D)
 }
 
-function createLineBezier(lunghezza){
-	var pntControlloLatoInfDx = [[0,0,0],[lunghezza,0,0]];
-	var pntControlloLatoSupDx = [[0,0,estrusioneRaggio],[lunghezza,0,estrusioneRaggio]];
-	var pntControlloLatoInfSx = [[0,larghezzaLinee,0],[lunghezza,larghezzaLinee,0]];
-	var pntControlloLatoSupSx = [[0,larghezzaLinee,estrusioneRaggio],[lunghezza,larghezzaLinee,estrusioneRaggio]];
 
-	var latoInfBezDx =  BEZIER(S0)(pntControlloLatoInfDx);
-	var latoSupBezDx =  BEZIER(S0)(pntControlloLatoSupDx);
-	var latoInfBezSx =  BEZIER(S0)(pntControlloLatoInfSx);
-	var latoSupBezSx =  BEZIER(S0)(pntControlloLatoSupSx);
-
-	cDx = bezierMappata_2D([latoInfBezDx,latoSupBezDx]);
-	cSx = bezierMappata_2D([latoInfBezSx,latoSupBezSx]);
-	cInf = bezierMappata_2D([latoInfBezDx, latoInfBezSx]);
-	cSup = bezierMappata_2D([latoSupBezDx, latoSupBezSx]);
-
-	curvaFinale = STRUCT([cDx, cSx, cInf, cSup]);
-
-	return curvaFinale;
-}
-
-function crateLine(lunghezza,dx,dy,dz){
-	return T([0,1,2])([dx,dy,dz])(createLineBezier(lunghezza));
-}
-
-function createIntersections(){
-	var spaziaturaTraLinee = diametroTavolino/4;
+function creaProfilo(){
+	h_schienale = altezza*0.7;
 	
-	//Lines 1-4
-	var lungh_linea = Math.cos(PI/4)* (diametroTavolino/2) * (0.985);
+	cor1 = 5//Punto più alto - 20
+	h_cor1 = h_schienale*0.8;
 
-	//Lines 2-3
-	var lungh_linea2 = lungh_linea*2.725;
-	var correzione_linea2 = 0;
+	corr2 = -10 //-20
+	h_cor2 = h_schienale*0.1;
 
-	var line1_x = crateLine(lungh_linea*2, -lungh_linea, lungh_linea, 0); //barra corta superiore
-	var line1_y = R([0,1])([PI/2])(crateLine(lungh_linea*2,  -lungh_linea, -lungh_linea, 0)); //barra corta a destra
+	corr3 = 20 //30
+	h_cor3 = h_schienale*0.20;
+
+	pA_1=[0,h_schienale,0];					pA_2=[0,h_cor1,cor1];
+	pA_3=[0,h_cor2,corr2]; 					pA_4=[0,h_cor3,corr3];
+	pA_5=[0,h_Asse*0.9,0];
+
+	pB_1=[larAsse,h_schienale,0];			pB_2=[larAsse,h_cor1,cor1];
+	pB_3=[larAsse,h_cor2,corr2]; 			pB_4=[larAsse,h_cor3,corr3];
+	pB_5=[larAsse,h_Asse*0.9,0];   
+
+	pointA = [pA_1,pA_2,pA_3,pA_4,pA_5];
+	pointB = [pB_1,pB_2,pB_3,pB_4,pB_5];
+
+	
+	
+	pC_1=[0,h_schienale,profAsse];					 pC_2=[0,h_cor1,cor1+profAsse];
+	pC_3=[0,h_cor2,corr2+profAsse]; 				pC_4=[0,h_cor3,corr3+profAsse];
+	pC_5=[0,0,profAsse];														
+
+	pD_1=[larAsse,h_schienale,profAsse];			  pD_2=[larAsse,h_cor1,cor1+profAsse];
+	pD_3=[larAsse,h_cor2,corr2+profAsse]; 			pD_4=[larAsse,h_cor3,corr3+profAsse];
+	pD_5=[larAsse,0,profAsse];
+
+	pointC2 = [pC_1,pC_2,pC_3,pC_4,pC_5];
+	pointD2 = [pD_1,pD_2,pD_3,pD_4,pD_5];
+	
+	pointABez = BEZIER(S0)(pointA);
+	pointBBez = BEZIER(S0)(pointB);	
+	pointCBez = BEZIER(S0)(pointC2);
+	pointDBez = BEZIER(S0)(pointD2);
+
+	c1 = bezierMappata_2D([pointABez,pointBBez]);
+	c2 = bezierMappata_2D([pointCBez,pointDBez]);
+	c3 = bezierMappata_2D([pointABez,pointCBez]);
+	c4 = bezierMappata_2D([pointBBez,pointDBez]);
  
-	var line2_x = crateLine(lungh_linea2, -lungh_linea2/2, -(spaziaturaTraLinee/2), 0); //barra lunga inferiore
-	var line2_y = R([0,1])([PI/2])(crateLine(lungh_linea2,  -lungh_linea2/2, -(spaziaturaTraLinee/2), 0)); //barra lunga destra
-
-	var line3_x = crateLine(lungh_linea2, -lungh_linea2/2, spaziaturaTraLinee/2, 0); //barra lunga superiore
-	var line3_y = R([0,1])([PI/2])(crateLine(lungh_linea2,  -lungh_linea2/2, spaziaturaTraLinee/2, 0)); //barra lunga sinistra
-
-	var line4_x = crateLine(lungh_linea*2, -lungh_linea, -lungh_linea, 0); //barra corta inferiore
- 	var line4_y = R([0,1])([PI/2])(crateLine(lungh_linea*2, -lungh_linea, lungh_linea, 0)); //barra corta sinistra
-
- 	var linesX = STRUCT([line1_x,line2_x,line3_x,line4_x]);
- 	var linesY = STRUCT([line1_y,line2_y,line3_y,line4_y]);
-
-	intersection = STRUCT([linesX,linesY]);
-	return intersection;
+	return STRUCT([c1,c2,c3,c4]);
 }
 
-function createCircumference(){
-	circ = EXTRUDE([estrusioneRaggio])(arc(2*PI, (diametroTavolino/2)-spessoreBordo, diametroTavolino/2));
-	return circ;
+function creaAsseOrizzontale(){
+		return CUBOID([larghezza,larAsse*0.6,h_Asse]);
 }
 
-function createSingleLeg(){
-	legSup = CYLINDER(raggioGambaSup, altezzaGambaSup)([24, 1]);
-	legInf = T([2])([altezzaGambaSup])(CYLINDER(raggioGambaInf, altezzaGambaInf)([24, 1]));
-	disco =  T([2])([altezzaGambaSup+altezzaGambaInf])(CYLINDER(raggioDisco, altezzaDisco)([24, 1]));
-	leg = STRUCT([legSup,legInf,disco]);
-	return leg;
+function creaAssiOrizzontali(){
+	asse1 = T([0,1,2])([1, altezza*0.95,1.4])(creaAsseOrizzontale());
+	asse2 = T([0,1,2])([1, altezza*0.8, 1.6])(creaAsseOrizzontale());
+	asse3 = T([0,1,2])([1, altezza*0.65, 1.8])(creaAsseOrizzontale());
+	asse4 = T([0,1,2])([1, altezza*0.50, 3.8])(creaAsseOrizzontale());
+
+	return STRUCT([asse1, asse2,asse3, asse4]);
 
 }
 
-function createLegs(){
-	lungh_linea = Math.cos(PI/4)* (diametroTavolino/2);
-	tralsazione_x =  lungh_linea*0.965;
-	tralsazione_y = lungh_linea*0.992;
+function creaAsseSedile(){
+	correzione_y = -2;
 
-	leg1 = T([0,1])([  tralsazione_x,  tralsazione_y])(createSingleLeg());
-	leg2 = T([0,1])([ -tralsazione_x, -tralsazione_y])(createSingleLeg());
-	leg3 = T([0,1])([  tralsazione_x, -tralsazione_y])(createSingleLeg());
-	leg4 = T([0,1])([ -tralsazione_x,  tralsazione_y])(createSingleLeg()); 
-
-	legs = STRUCT([leg1,leg2,leg3,leg4]);
-	return legs;
-}
-
-function createTableCofee(){
-	circumference = createCircumference();
-	intersections =  createIntersections();
-	legs = createLegs();
-
-	coffeeTableModel = T([2])([-(altezzaGambaSup+altezzaGambaInf+altezzaDisco)])(STRUCT([circumference,intersections,legs]));
-}
-
-
-function creaPrimoScaffale(lunghezza_x, altezza_y){
-	piano = T([2])([-altezza_y])(CUBOID([profonditaPiano, lunghezza_x , spessoreGradini]));
-	Sx = T([1,2])([lunghezza_x,-altezza_y])(CUBOID([profonditaPiano, spessoreGradini, altezza_y]));
-	Dx = T([2])([-altezza_y])(CUBOID([profonditaPiano, spessoreGradini, altezza_y]));
-	return STRUCT([Sx,Dx, piano]);
-}
-
-function creaScaffale(lunghezza_x, altezza_y){
-	piano = T([2])([-altezza_y])(CUBOID([profonditaPiano, lunghezza_x , spessoreGradini]));
-	Sx = T([1,2])([lunghezza_x,-altezza_y])(CUBOID([profonditaPiano, spessoreGradini, altezza_y]));
-	return STRUCT([Sx,piano]);
-}
-
-function creaAsta(){
-	return COLOR(black)(T([2])([-altezzaPrimoScaffale])(CYLINDER(raggioAsta, altezzaAsta)([24, 1])));
-	}
-
-function creaScaffaliAlternati(){
-	var spaziaturagradini = 1;
- 	g1 = T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaPrimoScaffale(lunghezzaPrimoGradino, altezzaPrimoScaffale));
- 	g2 = R([0,1])([PI/2])(T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaScaffale(lunghezzaPrimoGradino+spaziaturagradini, altezzaPrimoScaffale*1.9)));
- 	g3 = R([0,1])([PI/2])(T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaScaffale(lunghezzaPrimoGradino+spaziaturagradini*2, altezzaPrimoScaffale*3)));
- 	g4 = T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaScaffale(lunghezzaPrimoGradino+spaziaturagradini*3, altezzaPrimoScaffale*4));
-	g5 = T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaScaffale(lunghezzaPrimoGradino+spaziaturagradini*4, altezzaPrimoScaffale*5));
-	g6 = R([0,1])([PI/2])(T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaScaffale(lunghezzaPrimoGradino+spaziaturagradini*5, altezzaPrimoScaffale*6)));
-	g7 = R([0,1])([PI/2])(T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaScaffale(lunghezzaPrimoGradino+spaziaturagradini*6, altezzaPrimoScaffale*7)));
-
- 	return COLOR(black)(STRUCT([g1,g2,g3,g4,g5,g6,g7]));
- 	}
-
- function creaScaffali(){
-	var spaziaturagradini = 1;
- 	g1 = T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaPrimoScaffale(lunghezzaPrimoGradino, altezzaPrimoScaffale));
- 	g2 = T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaScaffale(lunghezzaPrimoGradino+spaziaturagradini, altezzaPrimoScaffale*1.9));
- 	g3 = T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaScaffale(lunghezzaPrimoGradino+spaziaturagradini*2, altezzaPrimoScaffale*3));
- 	g4 = T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaScaffale(lunghezzaPrimoGradino+spaziaturagradini*3, altezzaPrimoScaffale*4));
-	g5 = T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaScaffale(lunghezzaPrimoGradino+spaziaturagradini*4, altezzaPrimoScaffale*5));
-	g6 = T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaScaffale(lunghezzaPrimoGradino+spaziaturagradini*5, altezzaPrimoScaffale*6));
-	g7 = T([0,1])([trasla_x_scaffale,trasla_y_scaffale])(creaScaffale(lunghezzaPrimoGradino+spaziaturagradini*6, altezzaPrimoScaffale*7));
-
- 	return COLOR(redd)(STRUCT([g1,g2,g3,g4,g5,g6,g7]));
- 	}	
-
-function createJoy(){
-	astaA = T([2])([-altezzaAsta])(creaAsta());
-	mobileA = STRUCT([astaA,creaScaffaliAlternati()]);
-	mobileA = T([0,1])([25,-30])(mobileA);
+	pE_1=[0,0,0];        	pE_2=[x_sedile,0,0];			   pE_3=[x_sedile/2,correzione_y, 0]; //basso a sinistra
+	pF_1=[0,0,l_sedile]; 	pF_2=[x_sedile,0,l_sedile];   pF_3=[x_sedile/2,correzione_y, l_sedile]; //basso a destra
 	
-	astaB = T([2])([-altezzaAsta])(creaAsta());
-	mobileB = STRUCT([astaB,creaScaffali()]); //Struct sulla libreria e sull'asta
-	mobileB = R([0,1])([-PI/2])(mobileB);
-	mobileB = T([0,1])([10,30])(mobileB);
+	pointE = [pE_1, pE_3, pE_2];
+	pointF = [pF_1, pF_3, pF_2];
 
-	joyModel = STRUCT([mobileA, mobileB]);
-	}
 
+	pG_1=[0,h_sedile,0];				pG_2=[x_sedile,h_sedile,0];				 pG_3=[x_sedile/2, h_sedile+correzione_y, 0]; //alto a sinistra
+	pH_1=[0,h_sedile,l_sedile];   pH_2=[x_sedile,h_sedile,l_sedile];		 pH_3=[x_sedile/2, h_sedile+correzione_y, l_sedile]; //alto a destra
+
+	pointG = [pG_1,pG_3,pG_2];
+	pointH = [pH_1,pH_3,pH_2];
+
+	pointEBez = BEZIER(S0)(pointE);
+	pointFBez = BEZIER(S0)(pointF);
+	pointGBez = BEZIER(S0)(pointG);
+	pointHBez = BEZIER(S0)(pointH);
+
+	c10 = bezierMappata_2D([pointEBez,pointFBez]);
+	c20 = bezierMappata_2D([pointGBez,pointHBez]);
+	c30 = bezierMappata_2D([pointEBez,pointGBez]);
+	c40 = bezierMappata_2D([pointFBez,pointHBez]);
+
+	return STRUCT([c10,c20,c30,c40]);
+}
+
+function creaCuscino(){
+	correzione = -3;
+	cuscino_x = 32;
+	cuscino_y = 0.4;
+	cuscino_z = 35;
+
+	pnt1=[0,0,0]; pnt2=[cuscino_x,0,0]; pnt3 = [cuscino_x/2,correzione,0]
+	pnt10=[0,0,cuscino_z]; pnt11=[cuscino_x,0,cuscino_z]; pnt12 = [cuscino_x/2,correzione,cuscino_z]
+	pnt20=[0,cuscino_y,0]; pnt21=[cuscino_x,cuscino_y,0]; pnt22=[cuscino_x/2,cuscino_y+correzione,0];
+	pnt30=[0,cuscino_y,cuscino_z]; pnt31=[cuscino_x,cuscino_y,cuscino_z]; pnt32=[cuscino_x/2,cuscino_y+correzione,cuscino_z]; 
+
+	point1 = [pnt1,pnt3, pnt2];
+	point10 = [pnt10,pnt12, pnt11];
+	point20 = [pnt20,pnt22, pnt21];
+	point30 = [pnt30,pnt32, pnt31];
+
+	point1Bez = BEZIER(S0)(point1);
+	point10Bez = BEZIER(S0)(point10);
+	point20Bez = BEZIER(S0)(point20);
+	point30Bez = BEZIER(S0)(point30);
+	
+	c10 = bezierMappata_2D([point1Bez,point10Bez]);
+	c20 = bezierMappata_2D([point20Bez,point30Bez]);
+	c30 = bezierMappata_2D([point1Bez,point20Bez]);
+	c40 = bezierMappata_2D([point10Bez,point30Bez]);
+
+	structure = COLOR(redd)(T([0,1,2])([2,altezza*0.325,-32])(STRUCT([c10,c20,c30,c40])));
+	return structure;
+
+}
+
+function makeSchienale(){
+	p1 = T([1])([altezza*0.3])(creaProfilo());
+	p2 = T([0,1])([larghezza,altezza*0.3])(creaProfilo());
+	
+	c1 = T([1,2])([altezza*0.3,-lunghezzaBraccio+2])(CUBOID([larAsse,1.5,lunghezzaBraccio]));
+	c2 = T([0,1,2])([larghezza, altezza*0.3,-lunghezzaBraccio+2])(CUBOID([larAsse,1.5,lunghezzaBraccio]));
+	
+	assi = creaAssiOrizzontali();
+	
+	a1 =  T([0,1,2])([1,altezza*0.3,-2])(creaAsseSedile());
+	a2 = T([0,1,2])([1,altezza*0.3,-(lunghezzaBraccio+l_sedile)/2.5])(creaAsseSedile());
+	a3 = T([0,1,2])([1,altezza*0.3,-lunghezzaBraccio+l_sedile])(creaAsseSedile());
+
+	return STRUCT([p1,p2,c1,c2,assi,a1,a2,a3]);
+}
+
+function creaProfiloLaterale(){
+	lungh_z = -lunghezzaBraccio*0.75;
+	corrPrimoAngolo = -4;
+
+	la_y = 1;
+	la_z = larAsse;
+	la_x = 3;
+
+	pI_9 =[0,-la_y*30 ,lungh_z-la_z];  pI_8 =[0,-la_y*30,lungh_z-la_z]; pI_7 =[0,-la_y,lungh_z-la_z]; pI_6 =[0,0,lungh_z-la_z];	 pI_5=[0, 0,lungh_z];								   	pI_3=[0, -la_y/2,0];			pI_1=[0,0,0];		pI_2=[0,la_y*4,0]; 		//basso a sinistra
+	pL_6=[0,-la_y*30, lungh_z]; pL_5=[0,-la_y, lungh_z];	pL_4=[0,-la_y, 0];	pL_3=[0,-la_y,la_z/2];	pL_1=[0,0,la_z];	pL_2=[0,la_y*4,la_z]; 	//in basso a destra
+
+	pointI = [pI_9, pI_9, pI_8, pI_7, pI_7,pI_7,pI_7,		pI_6, pI_5,		 pI_3, pI_1, pI_2];
+	pointL = [pL_6, pL_5, pL_5, pL_5,pL_5, pL_4, pL_3, pL_1, pL_2];
+
+	
+
+	pM_9 =[la_x,-la_y*30,lungh_z-la_z]; pM_8 =[la_x,-la_y*30,lungh_z-la_z]; pM_7 =[la_x,-la_y,lungh_z-la_z]; pM_6 =[la_x,0,lungh_z-la_z];		   		pM_5=[la_x,0 ,lungh_z];											pM_3=[la_x, -la_y/2, 0];			pM_1=[la_x,0,0];		pM_2=[la_x,la_y*4,0]; //alto a sinistra
+	pN_6=[la_x,-la_y*30,lungh_z]; pN_5=[la_x,-la_y,lungh_z];		pN_4=[la_x,-la_y, 0];   pN_3=[la_x,-la_y,la_z/2];	pN_1=[la_x,0,la_z];	pN_2=[la_x,la_y*4,la_z]; //alto a destra
+
+
+	pointM = [pM_9, pM_8, pM_7,pM_7,pM_7,pM_7, pM_6,		pM_5,			      pM_3, pM_1,pM_2];
+	pointN = [pN_6, pN_5, pN_5, pN_5,pN_5, pN_4, pN_3, pN_1,pN_2];
+	
+	pointIBez = BEZIER(S0)(pointI);
+	pointLBez = BEZIER(S0)(pointL);	
+	pointMBez = BEZIER(S0)(pointM);
+	pointNBez = BEZIER(S0)(pointN);
+
+	cIL = bezierMappata_2D([pointIBez,pointLBez]);
+	cMN = bezierMappata_2D([pointMBez,pointNBez]);
+	cIM = bezierMappata_2D([pointIBez,pointMBez]);
+	cLN = bezierMappata_2D([pointLBez,pointNBez]);
+
+	curva1 = STRUCT([cIL,cMN,cIM,cLN]);
+
+	
+	pI_10 = [0,-la_y*30-la_z ,lungh_z]; pI_11 =[0,-la_y*30-la_z ,0]; pI_12 =[0,-la_y*30 ,lungh_z-la_z]; pI_13 =[0,-la_y*30-la_z,lungh_z-la_z]; pI_14 =[0,-la_y*30-la_z,-lungh_z/2];
+	pL_10 = [0,-la_y*30, lungh_z]; pL_11 = [0,-la_y*30, 0]; pL_12 = [0,-la_y*30, -lungh_z/2]; 
+
+	pM_10 =[la_x,-la_y*30-la_z,lungh_z]; pM_11 =[la_x,-la_y*30-la_z,0]; pM_12 =[la_x,-la_y*30,lungh_z-la_z]; pM_13 =[la_x,-la_y*30-la_z,lungh_z-la_z]; pM_14 =[la_x,-la_y*30-la_z,-lungh_z/2];
+	pN_10=[la_x,-la_y*30,lungh_z]; 	pN_11=[la_x,-la_y*30,0]; pN_12=[la_x,-la_y*30,-lungh_z/2];
+
+
+	
+	pointI2 = [pI_12,pI_13,pI_13,pI_10,pI_11,pI_14];
+	pointL2 = [pL_10,pL_11,pL_12];
+	pointM2 = [pM_12,pM_13,pM_13,pM_10, pM_11,pM_14];
+	pointN2 = [pN_10, pN_11,pN_12];
+
+
+	pointI2Bez = BEZIER(S0)(pointI2);
+	pointL2Bez = BEZIER(S0)(pointL2);	
+	pointM2Bez = BEZIER(S0)(pointM2);
+	pointN2Bez = BEZIER(S0)(pointN2);
+
+	cIL2 = bezierMappata_2D([pointI2Bez,pointL2Bez]);
+	cMN2 = bezierMappata_2D([pointM2Bez,pointN2Bez]);
+	cIM2 = bezierMappata_2D([pointI2Bez,pointM2Bez]);
+	cLN2 = bezierMappata_2D([pointL2Bez,pointN2Bez]);
+
+	curva2 = STRUCT([cIL2,cMN2,cIM2,cLN2]);
+
+	return STRUCT([curva1, curva2]);
+}
+
+function sostegno1(){
+  var c1 = T([1,2])([0.5,12.11])(CUBOID([larghezza*1.07,larAsse,larAsse]));
+  return c1; 
+}
+
+function sostegno2(){
+  var c2 = T([1,2])([8,-27.25])(CUBOID([larghezza*1.07,larAsse,larAsse]));
+  return c2; 
+}
+
+
+function makeModel(){
+	schienale = makeSchienale();
+	profLaterleDx = T([0,1,2])([-3,altezza*0.65,1])(creaProfiloLaterale());
+	profLaterleSx = T([0,1,2])([larghezza+larAsse,altezza*0.65,1])(creaProfiloLaterale());
+	sostegni = STRUCT([sostegno1(),sostegno2()]);
+	poangChair = COLOR(chair_color)(STRUCT([schienale,profLaterleDx,profLaterleSx,sostegni]));
+	copertura = creaCuscino();
+	poangChair = STRUCT([poangChair, copertura]);
+}
 
 function drawModel(){
-	DRAW(joyModel);
-	DRAW(coffeeTableModel);
-}
+	DRAW(poangChair);
+} 
 
 function hideModel(){
-	HIDE(coffeeTableModel);
+	HIDE(poangChair);
 }
 
-
-//richiamo delle funzioni
-createTableCofee();
-createJoy();
+makeModel();
 drawModel();
-
